@@ -1,0 +1,237 @@
+@prefix rdf:           <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:          <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:           <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl:           <http://www.w3.org/2002/07/owl#> .
+@prefix skos:          <http://www.w3.org/2004/02/skos/core#> .
+@prefix prov:          <http://www.w3.org/ns/prov#> .
+@prefix sio:           <http://semanticscience.org/resource/> .
+@prefix dcat:          <http://www.w3.org/ns/dcat#> .
+@prefix dcterms:       <http://purl.org/dc/terms/> .
+@prefix void:          <http://rdfs.org/ns/void#> .
+@prefix foaf:          <http://xmlns.com/foaf/0.1/> .
+@prefix ov:            <http://open.vocab.org/terms/> .
+@prefix setl:          <http://purl.org/twc/vocab/setl/> .
+@prefix csvw:          <http://www.w3.org/ns/csvw#> .
+@prefix pv:            <http://purl.org/net/provenance/ns#>.
+@prefix sp:            <http://spinrdf.org/sp#>.
+@prefix api_vocab: <http://purl.org/linked-data/api/vocab#>.
+
+@prefix :              <http://purl.org/twc/bio/setl/drugbank/> .
+
+@prefix nanopub: <http://www.nanopub.org/nschema#> .
+
+:drugbank_interaction_mappings a csvw:Table, setl:Table;
+  prov:wasGeneratedBy [
+    a setl:Extract;
+    prov:used <file:///apps/biokg/data/drugbank_interactions.csv>
+  ].
+
+:drugbank_xml a setl:XML, setl:ZipFile;
+  setl:xpath "/{http://www.drugbank.ca}drugbank/{http://www.drugbank.ca}drug";
+  prov:wasGeneratedBy [
+     a setl:Extract;
+     prov:used <https://www.drugbank.ca/releases/5-0-11/downloads/all-full-database>;
+  ].
+
+:drugbank_import a setl:SemanticETLScript;
+  rdfs:label "DrugBank Import SETL Script".
+
+# To Do: add snp-effects, carriers, transporters
+# To Do: add drug interactions
+# To Do: add snp adverse drug reactions
+
+:nanopubs a void:Dataset, dcat:Dataset, setl:Persisted;
+  prov:wasGeneratedBy :drugbank_import, [
+    a setl:Transform, setl:JSLDT;
+    prov:used :drugbank_xml;
+    prov:qualifiedUsage [ a prov:Usage; prov:entity :drugbank_interaction_mappings; prov:hadRole [ dcterms:identifier "interaction_map"]];
+    setl:hasContext '''{
+  "dataset" : "https://hbgd.tw.rpi.edu/dataset/",
+  "sio" :     "http://semanticscience.org/resource/",
+  "chear" :   "http://hadatac.org/ont/chear#",
+  "skos" :    "http://www.w3.org/2004/02/skos/core#",
+  "dcterms" : "http://purl.org/dc/terms/",
+  "prov" :    "http://www.w3.org/ns/prov#",
+  "rdfs" :    "http://www.w3.org/2000/01/rdf-schema#",
+  "doi" :     "http://dx.doi.org/",
+  "pubmed" :  "https://www.ncbi.nlm.nih.gov/pubmed/",
+  "nanopub" : "http://www.nanopub.org/nschema#",
+  "bions" :    "http://purl.org/twc/bio/ns/",
+  "entry" :    "http://purl.org/twc/bio/nanopublications/drugbank/",
+  "sample" :    "http://nanomine.tw.rpi.edu/sample/",
+  "article" :    "http://nanomine.tw.rpi.edu/article/",
+  "compound" :    "http://nanomine.tw.rpi.edu/compound/",
+  "location" :    "http://nanomine.tw.rpi.edu/location/",
+  "lang" :    "http://nanomine.tw.rpi.edu/language/",
+  "void" :    "http://rdfs.org/ns/void#",
+  "dcat" : "http://www.w3.org/ns/dcat#",
+  "uniprot": "http://purl.uniprot.org/uniprot/",
+  "drugbank" : "http://purl.org/twc/bio/drugbank/",
+  "chebi" : "http://bio2rdf.org/chebi:",
+  "go": "http://purl.obolibrary.org/obo/GO_",
+  "mi": "http://purl.obolibrary.org/obo/MI_",
+  "xsd" : "http://www.w3.org/2001/XMLSchema#"
+}''';
+    prov:value """[{
+  "@with": "row.findtext('db:drugbank-id[@primary]',namespaces={'db':'http://www.drugbank.ca'}) as drugid",
+  "@do": 
+    {
+      "@id": "entry:{{drugid}}_np",
+      "sio:isAbout" : { "@id" : "drugbank:{{drugid}}" },
+      "@graph": [
+        {
+          "@id": "entry:{{drugid}}_np",
+          "@type" : "nanopub:Nanopublication",
+          "nanopub:hasAssertion" : {
+            "@id": "entry:{{drugid}}_assertion",
+            "@type": "nanopub:Assertion",
+            "@graph" : [
+              {
+                "@id" : "drugbank:{{drugid}}",
+                "@type" : [
+                  "sio:Drug", 
+                  { 
+                    "@if" : "'type' in row.attrib", 
+                    "@id" : "bions:{{row.attrib['type'].title().replace(' ','')}}Drug",
+                    "rdfs:subClassOf" : { "@id" : "sio:Drug"},
+                    "rdfs:label" : "{{row.attrib['type'].title()}} Drug"
+                  },
+                  { 
+                    "@for" : "group in row.findall('db:groups/db:group',namespaces={'db':'http://www.drugbank.ca'})", 
+                    "@do" : {
+                      "@id" : "bions:{{group.text.title().replace(' ','')}}Drug",
+                      "rdfs:subClassOf" : { "@id" : "sio:Drug"},
+                      "rdfs:label" : "{{group.text.title()}} Drug"
+                    }
+                  }
+                ],
+                "rdfs:label" : "{{row.findtext('db:name',namespaces={'db':'http://www.drugbank.ca'})}}",
+                "skos:altLabel" : [
+                  {
+                    "@for" : "product in row.findall('db:products/db:product',namespaces={'db':'http://www.drugbank.ca'})",
+                    "@do" : {
+                      "@value" : "{{product.findtext('db:name',namespaces={'db':'http://www.drugbank.ca'})}}"
+                    }
+                  }
+                ],
+                "dcterms:description" : "{{row.findtext('db:description',namespaces={'db':'http://www.drugbank.ca'})}}"
+              }
+            ]
+          },
+          "nanopub:hasPublicationInfo" : {
+            "@id": "entry:{{drugid}}_pubinfo",
+            "@type": "nanopub:PublicationInfo",
+            "@graph" : [
+              {
+                "@id": "entry:{{drugid}}_assertion",
+                "prov:wasQuotedFrom" : [{ "@id" : "entry:{{drugid}}" }, { "@id" : "https://www.drugbank.ca/" }]
+              }
+            ]
+          },
+          "nanopub:hasProvenance" : {
+            "@id": "entry:{{drugid}}_provenance",
+            "@type": "nanopub:Provenance",
+            "@graph" : [
+              {
+                "@id": "entry:{{drugid}}_assertion",
+                "prov:wasDerivedFrom" : [
+                  {
+                    "@for" : "article in row.findall('db:articles/db:article',namespaces={'db':'http://www.drugbank.ca'})",
+                    "@do" : {
+                      "@id" : "pubmed:{{article.findtext('db:pubmed-id',namespaces={'db':'http://www.drugbank.ca'})}}"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+  "@with": "row.findtext('db:drugbank-id[@primary]',namespaces={'db':'http://www.drugbank.ca'}) as drugid",
+  "@do": 
+    {
+      "@for" : "target in row.findall('db:targets/db:target',namespaces={'db':'http://www.drugbank.ca'}) + row.findall('db:enzymes/db:enzyme',namespaces={'db':'http://www.drugbank.ca'})",
+      "@do": 
+        {
+          "@id": "entry:{{drugid}}_{{target.findtext('db:id',namespaces={'db':'http://www.drugbank.ca'})}}_np",
+          "sio:isAbout" : { "@id" : "drugbank:{{drugid}}" },
+          "@graph": [
+            {
+              "@id": "entry:{{drugid}}_{{target.findtext('db:id',namespaces={'db':'http://www.drugbank.ca'})}}_np",
+              "@type" : "nanopub:Nanopublication",
+              "nanopub:hasAssertion" : {
+                "@id": "entry:{{drugid}}_{{target.findtext('db:id',namespaces={'db':'http://www.drugbank.ca'})}}_assertion",
+                "@type": "nanopub:Assertion",
+                "@graph" : [
+                  {
+                    "@id" : "drugbank:interaction_{{drugid}}_{{target.findtext('db:id',namespaces={'db':'http://www.drugbank.ca'})}}",
+                    "@type" : [
+                      "sio:Interacting",
+                      {
+                        "@for" : "type in ', '.join(interaction_map[interaction_map.label == 'inhibitor'].interaction).split(', ')",
+                        "@do" : {"@id" : "{{type}}"}
+                      }
+                    ],
+                    "sio:hasAgent" : { "@id" : "drugbank:{{drugid}}" },
+                    "sio:hasTarget" : [
+                      { "@for" : "protein in target.findall('db:polypeptide',namespaces={'db':'http://www.drugbank.ca'})",      
+                        "@do": {
+                          "@id" : "uniprot:{{protein.attrib['id']}}",
+                          "@type" : "sio:Protein",
+                          "rdfs:label" : "{{target.findtext('db:name',namespaces={'db':'http://www.drugbank.ca'})}}",
+                          "skos:altLabel" : [
+                            {
+                              "@if" : "protein.find('db:gene-name',namespaces={'db':'http://www.drugbank.ca'})",
+                              "@value" : "{{target.findtext('db:gene-name',namespaces={'db':'http://www.drugbank.ca'})}}"
+                            },
+                            {
+                              "@for" : "synonym in protein.findall('db:synonyms/db:synonym',namespaces={'db':'http://www.drugbank.ca'})",
+                              "@do" : { "@value" : "{{synonym.text}}" }
+                            }
+                          ]
+                        }
+                      }
+                    ],
+                    "sio:hasValue" : "{{target.findtext('db:polypeptide/db:specific-function',namespaces={'db':'http://www.drugbank.ca'})}}"
+                  }
+                ]
+              },
+              "nanopub:hasPublicationInfo" : {
+                "@id": "entry:{{drugid}}_{{target.findtext('db:id',namespaces={'db':'http://www.drugbank.ca'})}}_pubinfo",
+                "@type": "nanopub:PublicationInfo",
+                "@graph" : [
+                  {
+                    "@id": "entry:{{drugid}}_{{target.findtext('db:id',namespaces={'db':'http://www.drugbank.ca'})}}_assertion",
+                    "prov:wasQuotedFrom" : { "@id" : "entry:{{drugid}}_{{target.findtext('db:id',namespaces={'db':'http://www.drugbank.ca'})}}" }
+                  }
+                ]
+              },
+              "nanopub:hasProvenance" : {
+                "@id": "entry:{{drugid}}_{{target.findtext('db:id',namespaces={'db':'http://www.drugbank.ca'})}}_provenance",
+                "@type": "nanopub:Provenance",
+                "@graph" : [
+                  {
+                    "@id": "entry:{{drugid}}_{{target.findtext('db:id',namespaces={'db':'http://www.drugbank.ca'})}}_assertion",
+                    "prov:wasQuotedFrom" : { "@id" : "entry:{{drugid}}_{{target.findtext('db:id',namespaces={'db':'http://www.drugbank.ca'})}}" },
+                    "prov:wasDerivedFrom" : [
+                      {
+                        "@for" : "article in row.findall('db:references/db:articles/db:article',namespaces={'db':'http://www.drugbank.ca'})",
+                        "@do" : {
+                          "@id" : "pubmed:{{article.findtext('db:pubmed-id',namespaces={'db':'http://www.drugbank.ca'})}}",
+                          "@type" : "sio:PeerReviewedArticle"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      
+    }
+}]"""
+  ].
