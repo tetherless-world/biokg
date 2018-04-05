@@ -16,3 +16,17 @@
 @prefix whyis: <http://vocab.rpi.edu/whyis/> .
 @prefix bibo: <http://purl.org/ontology/bibo/> .
 
+sio:Drug rdfs:subClassOf sio:BiologicalEntitiy;
+  whyis:hasOutgoing "outgoing_bio_entity.json";
+  whyis:hasIncoming "incoming_bio_entity.json".
+sio:Protein rdfs:subClassOf sio:BiologicalEntity;
+  whyis:hasOutgoing "outgoing_bio_entity.json";
+  whyis:hasIncoming "incoming_bio_entity.json".
+
+<http://purl.uniprot.org/core/Protein> rdfs:subClassOf sio:BiologicalEntity;
+  whyis:hasOutgoing "outgoing_bio_entity.json";
+  whyis:hasIncoming "incoming_bio_entity.json".
+
+sio:BiologicalEntity whyis:hasOutgoing "outgoing_bio_entity.json";
+  whyis:hasIncoming "incoming_bio_entity.json".
+

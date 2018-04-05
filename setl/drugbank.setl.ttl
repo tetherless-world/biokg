@@ -67,7 +67,7 @@
   "dcat" : "http://www.w3.org/ns/dcat#",
   "uniprot": "http://purl.uniprot.org/uniprot/",
   "drugbank" : "http://purl.org/twc/bio/drugbank/",
-  "chebi" : "http://bio2rdf.org/chebi:",
+  "chebi" : "http://purl.obolibrary.org/obo/CHEBI_",
   "go": "http://purl.obolibrary.org/obo/GO_",
   "mi": "http://purl.obolibrary.org/obo/MI_",
   "xsd" : "http://www.w3.org/2001/XMLSchema#"
@@ -77,11 +77,11 @@
   "@do": 
     {
       "@id": "entry:{{drugid}}_np",
-      "sio:isAbout" : { "@id" : "drugbank:{{drugid}}" },
       "@graph": [
         {
           "@id": "entry:{{drugid}}_np",
           "@type" : "nanopub:Nanopublication",
+          "sio:isAbout" : { "@id" : "drugbank:{{drugid}}" },
           "nanopub:hasAssertion" : {
             "@id": "entry:{{drugid}}_assertion",
             "@type": "nanopub:Assertion",
@@ -114,7 +114,12 @@
                     }
                   }
                 ],
-                "dcterms:description" : "{{row.findtext('db:description',namespaces={'db':'http://www.drugbank.ca'})}}"
+                "dcterms:description" : [
+                  { 
+                    "@if" : "row.findtext('db:description',namespaces={'db':'http://www.drugbank.ca'})",
+                    "@value" : "{{row.findtext('db:description',namespaces={'db':'http://www.drugbank.ca'})}}"
+                  }
+                ]
               }
             ]
           },
@@ -157,10 +162,10 @@
       "@do": 
         {
           "@id": "entry:{{drugid}}_{{target.findtext('db:id',namespaces={'db':'http://www.drugbank.ca'})}}_np",
-          "sio:isAbout" : { "@id" : "drugbank:{{drugid}}" },
           "@graph": [
             {
               "@id": "entry:{{drugid}}_{{target.findtext('db:id',namespaces={'db':'http://www.drugbank.ca'})}}_np",
+              "sio:isAbout" : { "@id" : "drugbank:{{drugid}}" },
               "@type" : "nanopub:Nanopublication",
               "nanopub:hasAssertion" : {
                 "@id": "entry:{{drugid}}_{{target.findtext('db:id',namespaces={'db':'http://www.drugbank.ca'})}}_assertion",
@@ -171,16 +176,22 @@
                     "@type" : [
                       "sio:Interacting",
                       {
-                        "@for" : "type in ', '.join(interaction_map[interaction_map.label == 'inhibitor'].interaction).split(', ')",
-                        "@do" : {"@id" : "{{type}}"}
+                        "@for" : "action in target.findall('db:actions/db:action',namespaces={'db':'http://www.drugbank.ca'})",
+                        "@do" : [
+                          {
+                            "@for" : "type in ', '.join(interaction_map[interaction_map.label == action.text].interaction).split(', ')",
+                            "@do" : { "@if": "len(type) > 0", "@id" : "{{type}}"}
+                          }
+                        ]
                       }
                     ],
+                    "rdfs:label" : "{{row.findtext('db:name',namespaces={'db':'http://www.drugbank.ca'})}} is {{target.findtext('db:actions/db:action',namespaces={'db':'http://www.drugbank.ca'})}} of {{target.findtext('db:name',namespaces={'db':'http://www.drugbank.ca'})}}.",
                     "sio:hasAgent" : { "@id" : "drugbank:{{drugid}}" },
                     "sio:hasTarget" : [
                       { "@for" : "protein in target.findall('db:polypeptide',namespaces={'db':'http://www.drugbank.ca'})",      
                         "@do": {
                           "@id" : "uniprot:{{protein.attrib['id']}}",
-                          "@type" : "sio:Protein",
+                          "@type" : "http://purl.uniprot.org/core/Protein",
                           "rdfs:label" : "{{target.findtext('db:name',namespaces={'db':'http://www.drugbank.ca'})}}",
                           "skos:altLabel" : [
                             {

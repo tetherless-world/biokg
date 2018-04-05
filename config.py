@@ -12,6 +12,8 @@ import agents.nlp as nlp
 import rdflib
 from datetime import datetime
 
+import urllib
+
 # Set to be custom for your project
 LOD_PREFIX = 'http://purl.org/twc/bio'
 #os.getenv('lod_prefix') if os.getenv('lod_prefix') else 'http://hbgd.tw.rpi.edu'
@@ -19,6 +21,15 @@ LOD_PREFIX = 'http://purl.org/twc/bio'
 skos = rdflib.Namespace("http://www.w3.org/2004/02/skos/core#")
 
 from biokg.agent import *
+
+uniprot_url = 'http://sparql.uniprot.org/sparql?query=%s&format=ttl'
+uniprot_query = '''PREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+construct { ?s ?p ?o }
+where {
+  values ?s {<%s>} 
+  ?s ?p ?o.
+  filter not exists { ?o rdf:subject []}
+}'''
 
 # base config class; extend it to your needs.
 Config = dict(
@@ -104,9 +115,10 @@ Config = dict(
     knowledge_updateEndpoint = 'http://localhost:8080/blazegraph/namespace/knowledge/sparql',
 
     LOGIN_USER_TEMPLATE = "auth/login.html",
-    CELERY_BROKER_URL = 'amqp://whyis:whyis@localhost:5672/whyis',
-    #CELERY_BROKER_URL = 'redis://localhost:6379/0',
-    CELERY_RESULT_BACKEND = 'amqp://whyis:whyis@localhost:5672/whyis',#'redis://localhost:6379/0',
+    #CELERY_BROKER_URL = 'amqp://whyis:whyis@localhost:5672/whyis',
+    CELERY_BROKER_URL = 'redis://localhost:6379/0',
+    #CELERY_RESULT_BACKEND = 'amqp://whyis:whyis@localhost:5672/whyis',
+    CELERY_RESULT_BACKEND = 'redis://localhost:6379/0',
     default_language = 'en',
 
 
@@ -152,10 +164,18 @@ Config = dict(
             format='xml'
         ),
         importer.LinkedData(
-            prefix = LOD_PREFIX+'/uniprot/',
+            prefix = LOD_PREFIX+'/protein/',
+            access_url = lambda entity_name: uniprot_url % (urllib.quote_plus(uniprot_query % entity_name)),
             url = 'http://purl.uniprot.org/uniprot/%s',
             headers={'Accept':'application/rdf+xml'},
-            format='xml'
+            format='turtle'
+        ),
+        importer.LinkedData(
+            prefix = LOD_PREFIX+'/uniprot/',
+            access_url = lambda entity_name: uniprot_url % (urllib.quote_plus(uniprot_query % entity_name)),
+            url = 'http://purl.uniprot.org/%s',
+            headers={'Accept':'application/rdf+xml'},
+            format='turtle'
         )
     ],
     inferencers = {
@@ -171,7 +191,8 @@ Config = dict(
 #               service=autonomic.Crawler(predicates=[skos.broader, skos.narrower, skos.related]),
 #               schedule=dict(hour="1")
 #              )
-    ]
+    ],
+    base_rate_probability = 0.87
 )
 
 
