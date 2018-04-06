@@ -229,7 +229,7 @@
                     "prov:wasQuotedFrom" : { "@id" : "entry:{{drugid}}_{{target.findtext('db:id',namespaces={'db':'http://www.drugbank.ca'})}}" },
                     "prov:wasDerivedFrom" : [
                       {
-                        "@for" : "article in row.findall('db:references/db:articles/db:article',namespaces={'db':'http://www.drugbank.ca'})",
+                        "@for" : "article in target.findall('db:references/db:articles/db:article',namespaces={'db':'http://www.drugbank.ca'})",
                         "@do" : {
                           "@id" : "pubmed:{{article.findtext('db:pubmed-id',namespaces={'db':'http://www.drugbank.ca'})}}",
                           "@type" : "sio:PeerReviewedArticle"

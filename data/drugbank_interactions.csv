@@ -1,0 +1,36 @@
+label,interaction
+inhibitor,mi:2255
+antagonist,mi:2255
+binder,go:0005488
+activator,mi:2254
+agonist,mi:2254
+adduct,http://purl.obolibrary.org/obo/PATO_0002133
+allosteric modulator,mi:1157
+antibody,go:0005488
+chaperone,go:0051087
+chelator,http://purl.obolibrary.org/obo/NCIT_C40483
+cleavage,mi:0194
+cofactor,go:0048037
+conversion inhibitor,mi:2255
+cross-linking/alkylation,http://purl.obolibrary.org/obo/NCIT_C40468
+inactivator,mi:2255
+incorporation into and destabilization,mi:2255
+inducer,mi:2254
+"inhibitor, competitive",mi:2255
+inhibitory allosteric modulator,mi:1157
+intercalation,http://purl.obolibrary.org/obo/NCIT_C40492
+inverse agonist,mi:2255
+ligand,go:0005488
+metabolizer,sio:Metabolism
+modulator,mi:1157
+negative modulator,mi:2255
+neutralizer,mi:2255
+partial agonist,mi:2254
+partial antagonist,mi:2255
+positive allosteric modulator,mi:1157
+potentiator,mi:2254
+product of,"mi:2048, chebi:25212, sio:SIO_000592"
+reducer,mi:2255
+stimulator,mi:2254
+substrate,go:0005488
+suppressor,mi:2255

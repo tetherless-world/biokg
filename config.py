@@ -192,7 +192,7 @@ Config = dict(
 #               schedule=dict(hour="1")
 #              )
     ],
-    base_rate_probability = 0.87
+    base_rate_probability = 0.8
 )
 
 
