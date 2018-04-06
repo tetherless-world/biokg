@@ -31,6 +31,7 @@ where {
   filter not exists { ?o rdf:subject []}
 }'''
 
+
 # base config class; extend it to your needs.
 Config = dict(
     # use DEBUG mode?
@@ -176,7 +177,7 @@ Config = dict(
             url = 'http://purl.uniprot.org/%s',
             headers={'Accept':'application/rdf+xml'},
             format='turtle'
-        )
+        ),
     ],
     inferencers = {
         "SETLr": autonomic.SETLr(),
