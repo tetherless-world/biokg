@@ -1,0 +1,15 @@
+
+
+<http://purl.org/twc/bio/ns/> a owl:Ontology;
+   rdfs:label "Biology Knowledge Graph Core Ontology";
+   rdfs:description "A unifying ontology to integrate the ontologies used in the Biology Knowledge Graph.";
+   owl:imports <http://purl.uniprot.org/core/>,
+               <http://semanticscience.org/ontology/sio-subset-labels.owl>,
+               <http://semanticscience.org/ontology/sio.owl> ,
+               <http://purl.obolibrary.org/obo/go.owl>,
+               <http://purl.obolibrary.org/obo/mi.owl>,
+               <http://purl.obolibrary.org/obo/pato.owl>,
+               <http://purl.obolibrary.org/obo/uo.owl>,
+               <http://purl.obolibrary.org/obo/hp.owl>,
+               <http://hadatac.org/ont/prov>,
+               <http://purl.org/dc/terms>.
