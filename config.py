@@ -123,7 +123,7 @@ Config = dict(
     default_language = 'en',
 
 
-    site_header_image = '/static/images/random_network.png',
+    site_header_image = 'static/images/random_network.png',
     
     namespaces = [
         importer.LinkedData(
@@ -159,6 +159,18 @@ Config = dict(
             ''',
         ),
         importer.LinkedData(
+            prefix = LOD_PREFIX+'/dbpedia/ontolgy/',
+            url = 'http://dbpedia.org/ontology/%s',
+            headers={'Accept':'text/turtle'},
+            format='turtle',
+        ),
+        importer.LinkedData(
+            prefix = LOD_PREFIX+'/dbpedia/class/',
+            url = 'http://dbpedia.org/class/%s',
+            access_url = 'http://dbpedia.org/sparql?default-graph-uri=http://dbpedia.org&query=DESCRIBE+<%s>&format=application/json-ld',
+            format='json-ld',
+        ),
+        importer.LinkedData(
             prefix = LOD_PREFIX+'/obo/',
             url = 'http://purl.obolibrary.org/obo/%s',
             headers={'Accept':'application/rdf+xml'},
@@ -181,6 +193,7 @@ Config = dict(
     ],
     inferencers = {
         "SETLr": autonomic.SETLr(),
+        "OntologyImporter" : autonomic.OntologyImporter(),
 #        "HTML2Text" : nlp.HTML2Text(),
 #        "EntityExtractor" : nlp.EntityExtractor(),
 #        "EntityResolver" : nlp.EntityResolver(),
