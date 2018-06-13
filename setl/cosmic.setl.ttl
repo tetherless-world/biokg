@@ -1,0 +1,98 @@
+@prefix api_vocab:     <http://purl.org/linked-data/api/vocab#> .
+@prefix csvw:          <http://www.w3.org/ns/csvw#> .
+@prefix dcat:          <http://www.w3.org/ns/dcat#> .
+@prefix dcterms:       <http://purl.org/dc/terms/> .
+@prefix foaf:          <http://xmlns.com/foaf/0.1/> .
+@prefix nanopub:       <http://www.nanopub.org/nschema#> .
+@prefix ov:            <http://open.vocab.org/terms/> .
+@prefix owl:           <http://www.w3.org/2002/07/owl#> .
+@prefix prov:          <http://www.w3.org/ns/prov#> .
+@prefix pv:            <http://purl.org/net/provenance/ns#>.
+@prefix rdf:           <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:          <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix setl:          <http://purl.org/twc/vocab/setl/> .
+@prefix sio:           <http://semanticscience.org/resource/> .
+@prefix sp:            <http://spinrdf.org/sp#>.
+@prefix skos:          <http://www.w3.org/2004/02/skos/core#> .
+@prefix void:          <http://rdfs.org/ns/void#> .
+@prefix whyis:         <http://vocab.rpi.edu/whyis/>.
+@prefix xsd:           <http://www.w3.org/2001/XMLSchema#> .
+@prefix :              <http://purl.org/twc/bio/setl/cosmic/> .
+
+
+# Importing tumor type mapping
+:cosmic_tumor_mappings a csvw:Table, setl:Table;
+  csvw:delimiter ",";
+  prov:wasGeneratedBy [
+    a setl:Extract;
+    prov:used <file:///apps/biokg/data/cosmic_tumor_types.csv>;
+  ].
+
+# Importing COSMIC csv data
+:cosmic_csv a csvw:Table, setl:Table;
+  csvw:delimiter ",";
+  prov:wasGeneratedBy [
+    a setl:Extract;
+    prov:used <file:///apps/biokg/data/cosmic_short.csv>;
+  ].
+
+:cosmic_import a setl:SemanticETLScript;
+  rdfs:label "COSMIC Import SETL Script".
+
+nanopub:cosmic a void:Dataset, setl:Persisted;
+  prov:wasGeneratedBy :cosmic_import, [
+    a setl:Transform, setl:JSLDT;
+    prov:qualifiedUsage [ a prov:Usage; prov:entity :cosmic_tumor_mappings; prov:hadRole [ dcterms:identifier "tumor_map"]];
+    prov:used :cosmic_csv;
+    setl:hasContext '''{
+      "sio" :     "http://semanticscience.org/resource/",
+      "rdfs" :    "http://www.w3.org/2000/01/rdf-schema#",
+      "np":       "http://www.nanopub.org/nschema#",
+      "ns":        "http://purl.org/twc/bio/cosmic/",
+      "bions" :    "http://purl.org/twc/bio/ns/",
+      "entry" :    "http://purl.org/twc/bio/nanopublications/cosmic/",
+      "doi" :     "http://dx.doi.org/",
+      "pubmed" :  "https://www.ncbi.nlm.nih.gov/pubmed/",
+      "uniprotkb":   "http://purl.uniprot.org/uniprot/",
+      "taxid":   "http://purl.org/twc/bio/protein/taxid/",
+      "rogid":   "http://purl.org/twc/bio/protein/rogid/",
+      "crogid":   "http://purl.org/twc/bio/protein/crogid/",
+      "causes":   "http://purl.org/twc/bio/cosmic/causes/",
+      "ddbj/embl/genbank":   "http://purl.org/twc/bio/genbank/",
+      "entrezgene/locuslink":   "http://purl.org/twc/bio/gene/",
+      "genbank_protein_gi":   "http://purl.org/twc/bio/protein/genbank/",
+      "hgnc":   "http://purl.org/twc/bio/hgnc/",
+      "icrogid":   "http://purl.org/twc/bio/icrogid",
+      "irogid":   "http://purl.uniprot.org/uniprot/",
+      "pdb":   "http://purl.org/twc/bio/pdb/",
+      "complex":   "http://purl.org/twc/bio/protein/complex/",
+      "refseq":   "http://purl.org/twc/bio/refseq/",
+      "MI":         "http://purl.obolibrary.org/obo/MI_" ,
+      "prov":     "http://www.w3.org/ns/prov#"
+    }''';
+    prov:value '''[
+    {
+      "@id": "np:",
+      "@type": "np:Nanopublication",
+      "@id": "entry:{{slugify(row['Entrez GeneId'])}}",
+      "np:hasAssertion": {
+        "@id": "entry:{{slugify(row['Entrez GeneId'])}}_causes",
+        "@graph": [
+          {
+            "@for": "type in row['Tumour Types(Somatic)'].split(',')",
+            "@do": {
+              "@for": "tumor_idx in range(len(tumor_map.label))",
+              "@do": { "@if": "tumor_map.label[tumor_idx] == type.strip()", "@type": "{{tumor_map.uri[tumor_idx]}}" }
+            }
+          }
+        ]
+      }
+    }
+    ]'''].
+
+<cosmic.ttl> a pv:File;
+    dcterms:format "application/trig";
+    prov:wasGeneratedBy [
+      a setl:Load;
+      prov:used nanopub:cosmic ;
+    ].
