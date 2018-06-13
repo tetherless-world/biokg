@@ -1,0 +1,290 @@
+label,uri
+ABC-DLBCL,http://purl.obolibrary.org/obo/NCIT_C36081
+AL,http://www.ebi.ac.uk/efo/EFO_1000068
+ALCL,http://www.ebi.ac.uk/efo/EFO_0003032
+ALL,http://www.ebi.ac.uk/efo/EFO_0000220
+AML,http://www.ebi.ac.uk/efo/EFO_0000222
+AML (CML blast transformation),http://www.ebi.ac.uk/efo/EFO_0000222
+AML*,http://www.ebi.ac.uk/efo/EFO_0000222
+APL,http://www.ebi.ac.uk/efo/EFO_0000224
+APL (translocation),http://www.ebi.ac.uk/efo/EFO_0000224
+B-ALL,http://purl.obolibrary.org/obo/DOID_0060592
+B-CLL,http://purl.obolibrary.org/obo/NCIT_C8644
+B-NHL,http://purl.obolibrary.org/obo/NCIT_C3457
+BNHL,http://purl.obolibrary.org/obo/NCIT_C3457
+Burkitt lymphoma,http://purl.obolibrary.org/obo/NCIT_C2912
+CLL,http://www.ebi.ac.uk/efo/EFO_0000095
+CML,http://purl.obolibrary.org/obo/DOID_8552
+CMML,http://purl.obolibrary.org/obo/NCIT_C3178
+CNL,http://purl.obolibrary.org/obo/NCIT_C3179
+CNS tumours,http://purl.obolibrary.org/obo/DOID_3620
+CRC,http://www.ebi.ac.uk/efo/EFO_0005842
+DFSP,http://purl.obolibrary.org/obo/NCIT_C4683
+DIPG,http://www.ebi.ac.uk/efo/EFO_1000026
+DLBCL,http://www.ebi.ac.uk/efo/EFO_0000403
+Down syndrome associated ALL,none-yet
+Downs associated ALL,none-yet
+ETP ALL,none-yet
+Ewing sarcoma,http://www.ebi.ac.uk/efo/EFO_0000174
+Ewing's sarcoma,http://www.ebi.ac.uk/efo/EFO_0000174
+GIST,http://purl.obolibrary.org/obo/NCIT_C3868
+HES,http://www.ebi.ac.uk/efo/EFO_1001467
+HNSCC,http://www.ebi.ac.uk/efo/EFO_0000181
+Hodgkin lymphoma,http://purl.obolibrary.org/obo/NCIT_C9357
+JMML,http://www.ebi.ac.uk/efo/EFO_1000309
+MALT,http://www.ebi.ac.uk/efo/EFO_0000191
+MCL,http://www.ebi.ac.uk/efo/EFO_1001469
+MDS,http://www.ebi.ac.uk/efo/EFO_0000198
+MDS/MPN-U,http://purl.obolibrary.org/obo/NCIT_C27780
+MLCLS,none-yet
+MM,http://www.ebi.ac.uk/efo/EFO_0001378
+MPN,http://purl.obolibrary.org/obo/NCIT_C4345
+NHL,http://purl.obolibrary.org/obo/NCIT_C3211
+NSCLC,http://purl.obolibrary.org/obo/NCIT_C2926
+PMBL,http://purl.obolibrary.org/obo/DOID_0080210
+RCC,http://www.ebi.ac.uk/efo/EFO_0000681
+SCC,http://www.ebi.ac.uk/efo/EFO_0000707
+SCCOHT,none-yet
+SM-AHD,none-yet
+SMZL,http://www.ebi.ac.uk/efo/EFO_1000550
+Spitzoid tumour,none-yet
+T cell lymphomas,none-yet
+T cell prolymphocytic leukaemia,none-yet
+T-ALL,http://www.ebi.ac.uk/efo/EFO_0000209
+T-CLL,http://purl.obolibrary.org/obo/NCIT_C70649
+T-PLL,http://www.ebi.ac.uk/efo/EFO_1000560
+T-cell large granular lymphocytic leukaemia,http://purl.obolibrary.org/obo/NCIT_C4664
+T-cell leukaemia,http://www.ebi.ac.uk/efo/EFO_0005592
+T-cell lymphoma,http://purl.obolibrary.org/obo/HP_0012190
+TGCT,http://www.ebi.ac.uk/efo/EFO_1000566
+WM,http://www.ebi.ac.uk/efo/EFO_0002616
+Wilms tumour,http://purl.obolibrary.org/obo/NCIT_C3267
+aCML,http://purl.obolibrary.org/obo/DOID_0060597
+acoustic neuroma,http://purl.obolibrary.org/obo/DOID_12689
+acute megakaryocytic leukaemia,http://purl.obolibrary.org/obo/HP_0006733
+adenoid cystic carcinoma,http://www.ebi.ac.uk/efo/EFO_0000231
+adrenal adenoma,http://purl.obolibrary.org/obo/DOID_656
+adrenal aldosterone producing adenoma,http://purl.obolibrary.org/obo/NCIT_C48451
+adrenocortical,http://purl.obolibrary.org/obo/NCIT_C94318
+alveolar rhabdomyosarcoma,http://purl.obolibrary.org/obo/NCIT_C3749
+alveolar soft part sarcoma,http://purl.obolibrary.org/obo/NCIT_C3750
+amplified in other cancers,none-yet
+anaplastic thyroid,http://purl.obolibrary.org/obo/HP_0011779
+anaplastic thyroid cancer,http://purl.obolibrary.org/obo/NCIT_C3878
+aneurysmal bone cyst,http://www.ebi.ac.uk/efo/EFO_1001760
+angiocentric glioma,http://purl.obolibrary.org/obo/NCIT_C92552
+angiomatoid fibrous histiocytoma,http://purl.obolibrary.org/obo/NCIT_C6494
+angiosarcoma,http://purl.obolibrary.org/obo/NCIT_C3088
+biliary tract,http://purl.obolibrary.org/obo/NCIT_C12678
+bladder,http://purl.obolibrary.org/obo/NCIT_C12414
+bladder carcinoma,http://purl.obolibrary.org/obo/NCIT_C4912
+borderline ovarian,none-yet
+breast,http://purl.obolibrary.org/obo/NCIT_C12971
+breast cancer,http://purl.obolibrary.org/obo/DOID_1612
+breast carcinoma,http://purl.obolibrary.org/obo/NCIT_C4872
+carcinoma,http://www.ebi.ac.uk/efo/EFO_0000313
+central nervous system hemangioblastomas,http://purl.obolibrary.org/obo/NCIT_C7007
+central nervous system tumours,http://purl.obolibrary.org/obo/NCIT_C9293
+cervical carcinoma,http://www.ebi.ac.uk/efo/EFO_0001061
+chemorefractory CLL,none-yet
+cholangiocarcinoma,http://purl.obolibrary.org/obo/NCIT_C4436
+chondroblastoma,http://www.ebi.ac.uk/efo/EFO_0000331
+chondrosarcoma,http://www.ebi.ac.uk/efo/EFO_0000333
+clear cell ovarian carcinoma,http://purl.obolibrary.org/obo/DOID_0050934
+clear cell renal carcinoma,http://www.ebi.ac.uk/efo/EFO_0000349
+clear cell renal cell carcinoma,http://purl.obolibrary.org/obo/NCIT_C4033
+clear cell sarcoma,http://purl.obolibrary.org/obo/DOID_4233
+colon,http://purl.obolibrary.org/obo/NCIT_C12382
+colon carcinoma,http://www.ebi.ac.uk/efo/EFO_1001950
+colorectal,http://purl.obolibrary.org/obo/NCIT_C13363
+colorectal adenocarcinoma,http://www.ebi.ac.uk/efo/EFO_0000365
+colorectal cancer,http://www.ebi.ac.uk/efo/EFO_0005842
+colorectal carcinoma,http://www.ebi.ac.uk/efo/EFO_1001951
+congenital fibrosarcoma,http://purl.obolibrary.org/obo/DOID_8418
+corticotroph adenoma,http://purl.obolibrary.org/obo/BTO_0005799
+cortisol secreting adrenal adenoma,http://purl.obolibrary.org/obo/NCIT_C48449
+cylindroma,http://purl.obolibrary.org/obo/NCIT_C27094
+de novo AML,http://purl.obolibrary.org/obo/NCIT_C9289
+desmoid,http://purl.obolibrary.org/obo/HP_0100245
+desmoplastic melanoma,http://purl.obolibrary.org/obo/NCIT_C37257
+desmoplastic small round cell tumour,http://www.ebi.ac.uk/efo/EFO_1000895
+diffuse gastric,http://purl.obolibrary.org/obo/NCIT_C9159
+embryonal rhabdomyosarcoma,http://purl.obolibrary.org/obo/NCIT_C8971
+enchondroma,http://purl.obolibrary.org/obo/NCIT_C3007
+endometrial,http://purl.obolibrary.org/obo/NCIT_C13322
+endometrial carcinoma,http://purl.obolibrary.org/obo/NCIT_C7558
+endometrial stromal sarcoma,http://www.ebi.ac.uk/efo/EFO_1000919
+endometrial stromal tumour,http://www.ebi.ac.uk/efo/EFO_1000920
+endometrioid carcinoma,http://www.ebi.ac.uk/efo/EFO_0000466
+endometrium,http://purl.obolibrary.org/obo/NCIT_C12313
+epithelial ovarian,http://purl.obolibrary.org/obo/NCIT_C4908
+epithelioid haemangioendothelioma,none-yet
+erythrocytosis,http://purl.obolibrary.org/obo/NCIT_C113711
+extraskeletal myxoid chondrosarcoma,http://purl.obolibrary.org/obo/NCIT_C27502
+eyelid sebaceous carcinoma,http://purl.obolibrary.org/obo/NCIT_C134831
+fibroadenoma,http://purl.obolibrary.org/obo/NCIT_C3744
+fibrolamellar hepatocellular carcinoma,http://www.orpha.net/ORDO/Orphanet_401920
+fibromyxoid sarcoma,http://purl.obolibrary.org/obo/NCIT_C45202
+fibrous dysplasia,http://purl.obolibrary.org/obo/NCIT_C34609
+follicular lymphoma,http://purl.obolibrary.org/obo/NCIT_C3209
+follicular thyroid,http://www.ebi.ac.uk/efo/EFO_0000501
+follicular thyroid adenoma,http://www.ebi.ac.uk/efo/EFO_0000499
+gallbladder carcinoma,http://www.ebi.ac.uk/efo/EFO_1001956
+gastric,http://purl.obolibrary.org/obo/NCIT_C13307
+gastric cancer,none-yet
+gastric carcinoma,http://www.ebi.ac.uk/efo/EFO_0000178
+glioblastoma,http://purl.obolibrary.org/obo/NCIT_C3058
+glioma,http://purl.obolibrary.org/obo/NCIT_C3059
+granulosa-cell tumour of the ovary,http://www.ebi.ac.uk/efo/EFO_0006461
+haemangioma,http://purl.obolibrary.org/obo/DOID_175
+head and neck,http://purl.obolibrary.org/obo/NCIT_C12418
+head and neck SCC,http://www.ebi.ac.uk/efo/EFO_0000181
+head and neck cancer,http://purl.obolibrary.org/obo/DOID_11934
+head-neck squamous cell,http://www.ebi.ac.uk/efo/EFO_0000181
+hepatic adenoma,none-yet
+hepatoblastoma,http://purl.obolibrary.org/obo/NCIT_C3728
+hepatocellular,http://purl.obolibrary.org/obo/NCIT_C79753
+hepatocellular carcinoma,http://purl.obolibrary.org/obo/NCIT_C3099
+idiopathic hypereosinophilic syndrome,http://www.orpha.net/ORDO/Orphanet_3260
+inflammatory myofibroblastic tumour,http://purl.obolibrary.org/obo/NCIT_C6481
+infrequent sarcomas,none-yet
+intestinal T-cell lymphoma,none-yet
+large granular lymphocytic leukaemia,none-yet
+large intestine,http://purl.obolibrary.org/obo/NCIT_C12379
+large intestine carcinoma,http://www.ebi.ac.uk/efo/EFO_1001951
+leiomyoma,http://purl.obolibrary.org/obo/NCIT_C3157
+lethal midline carcinoma,none-yet
+lethal midline carcinoma of young people,none-yet
+leukaemia,http://www.ebi.ac.uk/efo/EFO_0000565
+leukaemia lymphoma and MDS associated with severe congenital neutropenia,none-yet
+lipoblastoma,http://purl.obolibrary.org/obo/NCIT_C27483
+lipoma,http://purl.obolibrary.org/obo/NCIT_C3192
+liposarcoma,http://purl.obolibrary.org/obo/NCIT_C3194
+lobular breast,http://www.ebi.ac.uk/efo/EFO_0008509
+luminal A breast,http://purl.obolibrary.org/obo/NCIT_C53554
+lung,http://purl.obolibrary.org/obo/NCIT_C12468
+lung SCC,http://purl.obolibrary.org/obo/DOID_3907
+lung adenocarcinoma,http://www.ebi.ac.uk/efo/EFO_0000571
+lung cancer,http://purl.obolibrary.org/obo/DOID_1324
+lung carcinoma,http://purl.obolibrary.org/obo/NCIT_C4878
+lymphoblastic leukaemia/biphasic,none-yet
+lymphoma,http://purl.obolibrary.org/obo/NCIT_C3208
+lymphomas,http://www.ebi.ac.uk/efo/EFO_0000574
+malignant melanoma of soft parts,http://www.ebi.ac.uk/efo/EFO_0008498
+malignant rhabdoid,http://www.ebi.ac.uk/efo/EFO_0005701
+mantle cell lymphoma,http://www.ebi.ac.uk/efo/EFO_1001469
+marginal zone B-cell lymphomas,http://purl.obolibrary.org/obo/DOID_0050748
+marginal zone lymphoma,http://purl.obolibrary.org/obo/NCIT_C4341
+mastocytosis,http://purl.obolibrary.org/obo/NCIT_C84269
+medullary thyroid,http://www.orpha.net/ORDO/Orphanet_1332
+medulloblastoma,http://purl.obolibrary.org/obo/NCIT_C3222
+megakaryoblastic leukaemia of Downs syndrome,none-yet
+melanocytic nevus,http://purl.obolibrary.org/obo/NCIT_C7570
+melanoma,http://purl.obolibrary.org/obo/NCIT_C3224
+meningeal haemangiopericytoma,none-yet
+meningioma,http://purl.obolibrary.org/obo/NCIT_C3230
+mesenchymal chondrosarcoma,http://www.ebi.ac.uk/efo/EFO_1001041
+mesothelioma,http://purl.obolibrary.org/obo/NCIT_C3234
+microfollicular thyroid adenoma,http://purl.obolibrary.org/obo/NCIT_C4160
+mucosal melanoma,http://purl.obolibrary.org/obo/NCIT_C114828
+multiple different leukaemia and lymphoma tumour types including ALL,none-yet
+multiple other tumour types,none-yet
+myelodysplastic syndrome,http://www.ebi.ac.uk/efo/EFO_0000198
+myeloid neoplasms,http://purl.obolibrary.org/obo/DOID_0070004
+myeloma,http://www.ebi.ac.uk/efo/EFO_0001378
+myoepithelioma,http://purl.obolibrary.org/obo/DOID_2661
+myxofibrosarcoma,http://purl.obolibrary.org/obo/NCIT_C6496
+,none-yet
+nasal NK/T lymphoma,http://www.orpha.net/ORDO/Orphanet_86879
+neuroblastoma,http://purl.obolibrary.org/obo/NCIT_C3270
+neurofibroma,http://purl.obolibrary.org/obo/NCIT_C3272
+oesophageal SCC,http://purl.obolibrary.org/obo/NCIT_C4024
+oesophageal squamous carcinoma,http://purl.obolibrary.org/obo/NCIT_C4024
+oesophageal squamous cell carcinoma,http://purl.obolibrary.org/obo/NCIT_C4024
+oesophagus,http://purl.obolibrary.org/obo/NCIT_C12389
+oligodendroglioma,http://www.ebi.ac.uk/efo/EFO_0000632
+oral SCC,http://www.ebi.ac.uk/efo/EFO_0000199
+oral squamous cell,http://www.ebi.ac.uk/efo/EFO_0000199
+oral squamous cell carcinoma,http://www.ebi.ac.uk/efo/EFO_0000199
+other CNS,none-yet
+other tumour types,none-yet
+others,none-yet
+ovarian,http://purl.obolibrary.org/obo/NCIT_C28047
+ovarian cancer,http://www.orpha.net/ORDO/Orphanet_213500
+ovarian carcinoma,http://purl.obolibrary.org/obo/DOID_4001
+ovarian mixed germ cell tumour,http://purl.obolibrary.org/obo/NCIT_C8114
+ovary,http://purl.obolibrary.org/obo/NCIT_C12404
+paediatric Burkitt lymphoma,http://purl.obolibrary.org/obo/NCIT_C9095
+paediatric GBM,http://purl.obolibrary.org/obo/NCIT_C5136
+paediatric glioblastoma,http://purl.obolibrary.org/obo/NCIT_C5136
+pancreas,http://purl.obolibrary.org/obo/NCIT_C12393
+pancreas acinar carcinoma,http://www.orpha.net/ORDO/Orphanet_424046
+pancreatic,http://purl.obolibrary.org/obo/NCIT_C25726
+pancreatic acinar cell carcinoma,http://purl.obolibrary.org/obo/NCIT_C7977
+pancreatic carcinoma,http://purl.obolibrary.org/obo/NCIT_C3850
+pancreatic ductal adenocarcinoma,http://purl.obolibrary.org/obo/NCIT_C9120
+pancreatic intraductal papillary mucinous neoplasm,http://purl.obolibrary.org/obo/DOID_7575
+pancreatic neuroendocrine tumour,http://purl.obolibrary.org/obo/NCIT_C27720
+pancreatic neuroendocrine tumours,http://purl.obolibrary.org/obo/NCIT_C27720
+papillary renal,http://www.orpha.net/ORDO/Orphanet_319298
+papillary thyroid,http://www.ebi.ac.uk/efo/EFO_0000641
+paraganglioma,http://purl.obolibrary.org/obo/NCIT_C3308
+parathyroid adenoma,http://purl.obolibrary.org/obo/HP_0002897
+parathyroid tumours,none-yet
+peripheral T-cell lymphoma,http://purl.obolibrary.org/obo/DOID_0050749
+peritoneal carcinomatosis,http://purl.obolibrary.org/obo/NCIT_C27382
+pheochromocytoma,http://purl.obolibrary.org/obo/HP_0002666
+phyllodes tumour,http://www.ebi.ac.uk/efo/EFO_0000653
+pilocytic astrocytoma,http://purl.obolibrary.org/obo/NCIT_C4047
+pituitary adenoma,http://purl.obolibrary.org/obo/DOID_3829
+pituitary blastoma,none-yet
+pleomorphic salivary gland adenoma,http://www.orpha.net/ORDO/Orphanet_454821
+pleuropulmonary blastoma,http://purl.obolibrary.org/obo/NCIT_C5669
+pre B-ALL,none-yet
+primary central nervous system lymphoma,http://purl.obolibrary.org/obo/HP_0030069
+primary central nervous system melanocytic neoplasms,none-yet
+prostate,http://purl.obolibrary.org/obo/NCIT_C12410
+prostate cancer,http://purl.obolibrary.org/obo/DOID_10283
+prostate carcinoma,http://purl.obolibrary.org/obo/NCIT_C4863
+pulmonary lymphangioleiomyomatosis (LAM),http://purl.obolibrary.org/obo/DOID_3319
+rare other tumour types,none-yet
+relapse ALL,none-yet
+renal,http://purl.obolibrary.org/obo/NCIT_C25225
+renal angiomyolipoma,http://purl.obolibrary.org/obo/HP_0006772
+renal cell carcinoma,http://purl.obolibrary.org/obo/NCIT_C9385
+renal cell carcinoma (childhood epithelioid),http://purl.obolibrary.org/obo/NCIT_C6568
+retinoblastoma,http://purl.obolibrary.org/obo/NCIT_C7541
+rhabdomyosarcoma,http://purl.obolibrary.org/obo/NCIT_C3359
+sAML,http://purl.obolibrary.org/obo/NCIT_C25765
+salivary adenoma,none-yet
+salivary gland mucoepidermoid,http://purl.obolibrary.org/obo/NCIT_C5908
+sarcoma,http://purl.obolibrary.org/obo/NCIT_C9118
+secretory breast,http://purl.obolibrary.org/obo/NCIT_C4189
+serous ovarian,http://purl.obolibrary.org/obo/NCIT_C5226
+sex cord-stromal tumour,http://purl.obolibrary.org/obo/DOID_192
+skin,http://purl.obolibrary.org/obo/NCIT_C12470
+skin SCC,http://purl.obolibrary.org/obo/NCIT_C4819
+skin basal cell,http://purl.obolibrary.org/obo/NCIT_C2921
+skin cancer,http://purl.obolibrary.org/obo/DOID_4159
+skin squamous cell,http://purl.obolibrary.org/obo/NCIT_C33562
+skin squamous cell carcinoma-burn scar related,http://purl.obolibrary.org/obo/NCIT_C27918
+small cell lung carcinoma,http://purl.obolibrary.org/obo/NCIT_C4917
+small intestine,http://purl.obolibrary.org/obo/NCIT_C12386
+small intestine neuroendocrine tumours,http://www.ebi.ac.uk/efo/EFO_1001928
+soft tissue sarcoma,http://purl.obolibrary.org/obo/NCIT_C9306
+solitary fibrous tumour,http://purl.obolibrary.org/obo/NCIT_C7634
+splenic marginal zone lymphoma,http://purl.obolibrary.org/obo/NCIT_C4663
+sporadic medulloblastoma,none-yet
+squamous cell carcinoma,http://purl.obolibrary.org/obo/NCIT_C2929
+stomach carcinoma,http://purl.obolibrary.org/obo/DOID_5517
+synovial sarcoma,http://purl.obolibrary.org/obo/NCIT_C3400
+testicular germ cell tumours and other tumour types,http://purl.obolibrary.org/obo/NCIT_C8591
+thyroid,http://purl.obolibrary.org/obo/NCIT_C12400
+thyroid cancer,http://purl.obolibrary.org/obo/DOID_1781
+toxic thyroid adenoma,none-yet
+urothelial cancer,http://www.ebi.ac.uk/efo/EFO_0008528
+urothelial cell carcinoma,http://www.ebi.ac.uk/efo/EFO_0008528
+uterine leiomyoma,http://purl.obolibrary.org/obo/HP_0000131
+uterine serous carcinoma,none-yet
+uveal melanoma,http://purl.obolibrary.org/obo/NCIT_C7712
+various benign mesenchymal tumours,http://purl.obolibrary.org/obo/NCIT_C4267
