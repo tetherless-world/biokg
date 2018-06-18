@@ -45,19 +45,20 @@ nanopub:cosmic a void:Dataset, setl:Persisted;
     prov:qualifiedUsage [ a prov:Usage; prov:entity :cosmic_tumor_mappings; prov:hadRole [ dcterms:identifier "tumor_map"]];
     prov:used :cosmic_csv;
     setl:hasContext '''{
+      "assertion" : "http://purl.org/twc/bio/cosmic/assertion/",
       "sio" :     "http://semanticscience.org/resource/",
       "rdfs" :    "http://www.w3.org/2000/01/rdf-schema#",
+      "genenp":   "http://purl.org/twc/bio/cosmic/np/",
       "np":       "http://www.nanopub.org/nschema#",
       "ns":        "http://purl.org/twc/bio/cosmic/",
       "bions" :    "http://purl.org/twc/bio/ns/",
-      "entry" :    "http://purl.org/twc/bio/nanopublications/cosmic/",
+      "geneid" :    "http://purl.org/twc/bio/nanopublications/cosmic/",
       "doi" :     "http://dx.doi.org/",
       "pubmed" :  "https://www.ncbi.nlm.nih.gov/pubmed/",
       "uniprotkb":   "http://purl.uniprot.org/uniprot/",
       "taxid":   "http://purl.org/twc/bio/protein/taxid/",
       "rogid":   "http://purl.org/twc/bio/protein/rogid/",
       "crogid":   "http://purl.org/twc/bio/protein/crogid/",
-      "causes":   "http://purl.org/twc/bio/cosmic/causes/",
       "ddbj/embl/genbank":   "http://purl.org/twc/bio/genbank/",
       "entrezgene/locuslink":   "http://purl.org/twc/bio/gene/",
       "genbank_protein_gi":   "http://purl.org/twc/bio/protein/genbank/",
@@ -72,17 +73,19 @@ nanopub:cosmic a void:Dataset, setl:Persisted;
     }''';
     prov:value '''[
     {
-      "@id": "np:",
+      "@id": "genenp:{{slugify(row['Entrez GeneId'])}}",
       "@type": "np:Nanopublication",
-      "@id": "entry:{{slugify(row['Entrez GeneId'])}}",
       "np:hasAssertion": {
-        "@id": "entry:{{slugify(row['Entrez GeneId'])}}_causes",
+        "@id": "assertion:{{slugify(row['Entrez GeneId'])}}",
         "@graph": [
           {
             "@for": "type in row['Tumour Types(Somatic)'].split(',')",
             "@do": {
               "@for": "tumor_idx in range(len(tumor_map.label))",
-              "@do": { "@if": "tumor_map.label[tumor_idx] == type.strip()", "@type": "{{tumor_map.uri[tumor_idx]}}" }
+              "@do": {
+                "@id": "geneid:{{slugify(row['Entrez GeneId'])}}",
+                "@if": "tumor_map.label[tumor_idx] == type.strip()", "prov:wasAssociatedWith": "<{{tumor_map.uri[tumor_idx]}}>"
+              }
             }
           }
         ]
