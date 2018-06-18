@@ -76,7 +76,7 @@ nanopub:cosmic a void:Dataset, setl:Persisted;
     {
       "@id": "cosmic_np:{{slugify(row['Entrez GeneId'])}}",
       "@type": "np:Nanopublication",
-      "np:hasProvenance": {
+      "np:hasAssertion": {
         "@id": "cosmic_provenance:{{slugify(row['Entrez GeneId'])}}",
         "@graph": [
           {
@@ -84,8 +84,8 @@ nanopub:cosmic a void:Dataset, setl:Persisted;
             "@do": {
               "@for": "tumor_idx in range(len(tumor_map.label))",
               "@do": {
-                "@id": "geneid:{{slugify(row['Entrez GeneId'])}}",
-                "@if": "tumor_map.label[tumor_idx] == type.strip()", "prov:wasAssociatedWith": "<{{tumor_map.uri[tumor_idx]}}>"
+                "@id": "entrezgene/locuslink:{{slugify(row['Entrez GeneId'])}}",
+                "@if": "tumor_map.label[tumor_idx] == type.strip()", "prov:wasAssociatedWith": {"@id": "{{tumor_map.uri[tumor_idx]}}"}
               }
             }
           }
