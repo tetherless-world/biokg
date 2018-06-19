@@ -77,7 +77,7 @@ nanopub:cosmic a void:Dataset, setl:Persisted;
       "@id": "cosmic_np:{{slugify(row['Entrez GeneId'])}}",
       "@type": "np:Nanopublication",
       "np:hasAssertion": {
-        "@id": "cosmic_provenance:{{slugify(row['Entrez GeneId'])}}",
+        "@id": "cosmic_assertion:{{slugify(row['Entrez GeneId'])}}",
         "@graph": [
           {
             "@for": "type in row['Tumour Types(Somatic)'].split(',')",
@@ -90,6 +90,9 @@ nanopub:cosmic a void:Dataset, setl:Persisted;
             }
           }
         ]
+      },
+      "np:hasProvenance": {
+        "prov:wasDerivedFrom": {"@id": "https://www.sanger.ac.uk/science/tools/cosmic"}
       }
     }
     ]'''].
