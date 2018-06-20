@@ -85,7 +85,7 @@ nanopub:cosmic a void:Dataset, setl:Persisted;
               "@for": "tumor_idx in range(len(tumor_map.label))",
               "@do": {
                 "@id": "entrezgene/locuslink:{{slugify(row['Entrez GeneId'])}}",
-                "@if": "tumor_map.label[tumor_idx] == type.strip()", "prov:wasAssociatedWith": {"@id": "{{tumor_map.uri[tumor_idx]}}"}
+                "@if": "tumor_map.label[tumor_idx] == type.strip()", "sio:000983": {"@id": "{{tumor_map.uri[tumor_idx]}}"}
               }
             }
           }
