@@ -1,5 +1,6 @@
 # RUKMAL-TEMPORARY CHANGES
 data/irefindex_short.txt
+data/cosmic.csv
 setl/cosmic.ttl
 setl/irefindex.ttl
 
@@ -102,8 +103,12 @@ ENV/
 # Rope project settings
 .ropeproject
 
+# VSCode project settings
+.vscode
+
 # mkdocs documentation
 /site
 
 # mypy
 .mypy_cache/
+
