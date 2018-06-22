@@ -1,4 +1,3 @@
-import json
 import logging
 import os
 import pandas as pd
@@ -16,7 +15,8 @@ except ImportError:
 
 # Setting up logging
 logging.basicConfig(filename='data/bin/cosmic_uniprot_map.log', filemode='w', level=logging.INFO)
-logging.getLogger().addHandler(logging.StreamHandler(stream=sys.stdout)) # Print to stderror
+# Print to stdout
+logging.getLogger().addHandler(logging.StreamHandler(stream=sys.stdout))
 
 # Configuration
 COSMIC_FILE_PATH = 'data/cosmic.csv'
@@ -27,6 +27,10 @@ HUMAN_TAXON = 9606 # Corresponds to http://purl.uniprot.org/core/taxonomy/9606
 UNIPROT_API_URL = 'http://www.uniprot.org/uniprot/'
 
 def main():
+    """
+    Map each of the COSMIC IDs to their UniProt IDs, isolating the ID from the latest
+    version of the UniProt database.
+    """
     # Checking if COSMIC file exists
     if not os.path.isfile(COSMIC_FILE_PATH):
         logging.fatal('COSMIC data file not found.')
@@ -53,11 +57,11 @@ def main():
             response = xmltodict.parse(raw) # Parse XML
         except xmltodict.expat.ExpatError:
             logging.warning('XML loading failed for Entrez ID {0} ({1})'.format(row['Entrez GeneId'], row['Gene Symbol']))
-            continue
+            uniprot_id, version = 'NONE', 0 # Unknown
+        else:    
+            # Extract Uniprot ID
+            uniprot_id, version = extractUniprotID(response, row['Entrez GeneId'])
         
-        # Extract Uniprot ID
-        uniprot_id, version = extractUniprotID(response, row['Entrez GeneId'])
-
         # Adding to output
         output_map.loc[index] = [row['Entrez GeneId'], uniprot_id, version]
 
@@ -65,10 +69,18 @@ def main():
     output_map.to_csv(OUTPUT_FILE_PATH, index=False)
 
 
-def extractUniprotID(response, entrez):
+def extractUniprotID(response: xmltodict.OrderedDict, entrez: str) -> tuple:
+    """
+    Extract the UniProt ID from the response from an API call to the UniProt endpoint.
+
+    :param  response:   Response object from the UniProt API call
+    :param  entrez:     Entrez GeneId to be mapped to a UniProt ID
+    :return:            Tuple of UniProt ID and the version of the database it was extracted from
+    """
     uniprot_id = ''
     version = 0 # initial
     if type(response['uniprot']['entry']) is list:
+        logging.warning('More than one match for {0}.'.format(entrez))
         for entry in response['uniprot']['entry']:
             # Check if it is for Uniprot
             try:
@@ -93,8 +105,16 @@ def extractUniprotID(response, entrez):
         logging.info('Entrez ID {0} mapped to {1} from version {2}'.format(entrez, uniprot_id, version))
     return uniprot_id, version
 
-def constructParams(entrez, genename):
-    query = 'GENEID:{0}+AND+{1}+AND+taxonomy:{2}'.format(entrez, genename, HUMAN_TAXON)
+def constructParams(entrez: str, genename: str, taxonomy: int = HUMAN_TAXON) -> dict:
+    """
+    Constructs a dictionary of parameters to be passed in the API call to the UniProt endpoint.
+
+    :param  entrez      Entrez GeneId to be queried
+    :param  genename    Name of the gene to be queried
+    :param  taxonomy    Taxonomy to be queried (defaults to HUMAN_TAXON)
+    :return:            Dictionary of the request parameters
+    """
+    query = 'GENEID:{0}+AND+{1}+AND+taxonomy:{2}'.format(entrez, genename, taxonomy)
     request_param = {
         'query': query,
         'format': 'xml'
