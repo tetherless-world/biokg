@@ -13,6 +13,7 @@ except ImportError:
     # Python 3.x
     from urllib.parse import urlencode
 
+
 # Setting up logging
 logging.basicConfig(filename='data/bin/cosmic_uniprot_map.log', filemode='w', level=logging.INFO)
 # Print to stdout
@@ -25,6 +26,8 @@ OUTPUT_FILE_PATH = 'data/cosmic_uniprot_ids.csv'
 # Constants
 HUMAN_TAXON = 9606 # Corresponds to http://purl.uniprot.org/core/taxonomy/9606
 UNIPROT_API_URL = 'http://www.uniprot.org/uniprot/'
+UNIPROT_PREFIX = 'http://www.uniprot.org/uniprot/'
+
 
 def main():
     """
@@ -80,6 +83,7 @@ def extractUniprotID(response: xmltodict.OrderedDict, entrez: str) -> tuple:
     uniprot_id = ''
     version = 0 # initial
     if type(response['uniprot']['entry']) is list:
+        # Multiple versions of UniProt available
         logging.warning('More than one match for {0}.'.format(entrez))
         for entry in response['uniprot']['entry']:
             # Check if it is for Uniprot
@@ -93,6 +97,7 @@ def extractUniprotID(response: xmltodict.OrderedDict, entrez: str) -> tuple:
             except TypeError:
                 continue
     else:
+        # One version of UniProt available
         entry = response['uniprot']['entry']
         # Only take one alias
         uniprot_id = entry['accession'][0] if type(entry['accession']) is list else entry['accession']
@@ -102,8 +107,10 @@ def extractUniprotID(response: xmltodict.OrderedDict, entrez: str) -> tuple:
         logging.warning('FAILED Uniprot ID Extraction for Entrez ID {0}'.format(entrez))
         uniprot_id = 'NOTFOUND'
     else:
+        uniprot_id = buildURI(uniprot_id)
         logging.info('Entrez ID {0} mapped to {1} from version {2}'.format(entrez, uniprot_id, version))
     return uniprot_id, version
+
 
 def constructParams(entrez: str, genename: str, taxonomy: int = HUMAN_TAXON) -> dict:
     """
@@ -120,6 +127,17 @@ def constructParams(entrez: str, genename: str, taxonomy: int = HUMAN_TAXON) -> 
         'format': 'xml'
     }
     return request_param
+
+
+def buildURI(unirpot_id: str) -> str:
+    """
+    Builds a UniProt KB URI, using the prefix defined in the constants.
+
+    :param  uniprot_id  UniProt KB ID to be converted to URI
+    :return:            UniProt KB URI
+    """
+    return UNIPROT_PREFIX + unirpot_id
+
 
 if __name__ == "__main__":
     main()
