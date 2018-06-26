@@ -1,1 +1,2 @@
 import agent
+import cosmic_uniprot_map

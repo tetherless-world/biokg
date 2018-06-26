@@ -15,7 +15,7 @@ except ImportError:
 
 
 # Setting up logging
-logging.basicConfig(filename='data/bin/cosmic_uniprot_map.log', filemode='w', level=logging.INFO)
+logging.basicConfig(filename='log/cosmic_uniprot_map.log', filemode='w', level=logging.INFO)
 # Print to stdout
 logging.getLogger().addHandler(logging.StreamHandler(stream=sys.stdout))
 
@@ -27,7 +27,19 @@ OUTPUT_FILE_PATH = 'data/cosmic_uniprot_ids.csv'
 HUMAN_TAXON = 9606 # Corresponds to http://purl.uniprot.org/core/taxonomy/9606
 UNIPROT_API_URL = 'http://www.uniprot.org/uniprot/'
 UNIPROT_PREFIX = 'http://www.uniprot.org/uniprot/'
+RDF_NULL = 'NONE'
 
+
+def mapToUniProt(entrez: str, gene_symbol: str) -> tuple:
+    """
+    Map a given COSMIC Entrez Gene ID and  Gene Symbol to a UniProt ID
+
+    :param  entrez:         Entrez Gene ID to be converted
+    :param  gene_symbol:    Gene symbol to be converted
+    :return                 Corresponding UniProt ID
+    """
+    uniprot_id, version = __makeRequest(entrez, gene_symbol)
+    return uniprot_id, version
 
 def main():
     """
@@ -44,27 +56,8 @@ def main():
     output_map = pd.DataFrame(columns=['EntrezGeneId', 'UniProtID', 'UniProtVersion'])
 
     for index, row in cosmic.iterrows():
-        # Constructing request metadata
-        params = constructParams(row['Entrez GeneId'], row['Gene Symbol'])
-        headers = {'Content-Type': 'text/html'}
+        uniprot_id, version = __makeRequest(row['Entrez GeneId'], row['Gene Symbol'])
 
-        # Making request
-        r = requests.get(UNIPROT_API_URL, params=params, headers=headers)
-        if r.status_code == 200:
-            logging.info('GET {0}'.format(r.url))
-        else:
-            logging.warning('FAILED GET request {0} with code {1}.'.format(r.url, r.status_code))
-            continue
-        raw = r.text
-        try:
-            response = xmltodict.parse(raw) # Parse XML
-        except xmltodict.expat.ExpatError:
-            logging.warning('XML loading failed for Entrez ID {0} ({1})'.format(row['Entrez GeneId'], row['Gene Symbol']))
-            uniprot_id, version = 'NONE', 0 # Unknown
-        else:    
-            # Extract Uniprot ID
-            uniprot_id, version = extractUniprotID(response, row['Entrez GeneId'])
-        
         # Adding to output
         output_map.loc[index] = [row['Entrez GeneId'], uniprot_id, version]
 
@@ -72,7 +65,43 @@ def main():
     output_map.to_csv(OUTPUT_FILE_PATH, index=False)
 
 
-def extractUniprotID(response: xmltodict.OrderedDict, entrez: str) -> tuple:
+def __makeRequest(entrez: str, gene_id: str) -> tuple:
+    """
+    Make request to the UniProt API, and extract the UniProt IDs
+
+    :param  entrez:         Entrez Gene ID to be converted
+    :param  gene_symbol:    Gene symbol to be converted
+    :return:                Corresponding UniProt IDs
+    """
+    # Constructing request metadata
+    params = __constructParams(entrez, gene_id)
+    headers = {'Content-Type': 'text/html'}
+
+    # Making request
+    r = requests.get(UNIPROT_API_URL, params=params, headers=headers)
+    if r.status_code == 200:
+        logging.info('GET {0}'.format(r.url))
+    else:
+        logging.warning('FAILED GET request {0} with code {1}.'.format(r.url, r.status_code))
+        return RDF_NULL, 0 # Unknown
+
+    # Parsing response
+    raw = r.text
+
+    try:
+        response = xmltodict.parse(raw) # Parse XML
+    except xmltodict.expat.ExpatError:
+        logging.warning('XML loading failed for Entrez ID {0} ({1}).'.format(entrez, gene_id))
+        return RDF_NULL, 0 # Unknown
+    else:
+        # Extract UniProt ID
+        uniprot_id, version = __extractUniprotID(response, entrez)
+        return uniprot_id, version
+
+
+    raw = r.text
+
+def __extractUniprotID(response: xmltodict.OrderedDict, entrez: str) -> tuple:
     """
     Extract the UniProt ID from the response from an API call to the UniProt endpoint.
 
@@ -107,12 +136,12 @@ def extractUniprotID(response: xmltodict.OrderedDict, entrez: str) -> tuple:
         logging.warning('FAILED Uniprot ID Extraction for Entrez ID {0}'.format(entrez))
         uniprot_id = 'NOTFOUND'
     else:
-        uniprot_id = buildURI(uniprot_id)
+        uniprot_id = __buildURI(uniprot_id)
         logging.info('Entrez ID {0} mapped to {1} from version {2}'.format(entrez, uniprot_id, version))
     return uniprot_id, version
 
 
-def constructParams(entrez: str, genename: str, taxonomy: int = HUMAN_TAXON) -> dict:
+def __constructParams(entrez: str, genename: str, taxonomy: int = HUMAN_TAXON) -> dict:
     """
     Constructs a dictionary of parameters to be passed in the API call to the UniProt endpoint.
 
@@ -129,7 +158,7 @@ def constructParams(entrez: str, genename: str, taxonomy: int = HUMAN_TAXON) -> 
     return request_param
 
 
-def buildURI(unirpot_id: str) -> str:
+def __buildURI(unirpot_id: str) -> str:
     """
     Builds a UniProt KB URI, using the prefix defined in the constants.
 
