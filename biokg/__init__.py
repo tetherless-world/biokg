@@ -1,2 +1,2 @@
-import agent
-import cosmic_uniprot_map
+#import agent
+import py2_cosmic_uniprot_map as cosmic_uniprot_map
