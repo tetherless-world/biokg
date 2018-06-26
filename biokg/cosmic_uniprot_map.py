@@ -38,8 +38,8 @@ def mapToUniProt(entrez: str, gene_symbol: str) -> tuple:
     :param  gene_symbol:    Gene symbol to be converted
     :return                 Corresponding UniProt ID
     """
-    uniprot_id, version = __makeRequest(entrez, gene_symbol)
-    return uniprot_id, version
+    uniprot_id = __makeRequest(entrez, gene_symbol)
+    return uniprot_id
 
 def main():
     """
@@ -53,19 +53,19 @@ def main():
 
     # Read COSMIC csv, create output map
     cosmic = pd.read_csv(COSMIC_FILE_PATH, sep=',')
-    output_map = pd.DataFrame(columns=['EntrezGeneId', 'UniProtID', 'UniProtVersion'])
+    output_map = pd.DataFrame(columns=['EntrezGeneId', 'UniProtID'])
 
     for index, row in cosmic.iterrows():
-        uniprot_id, version = __makeRequest(row['Entrez GeneId'], row['Gene Symbol'])
+        uniprot_id = __makeRequest(row['Entrez GeneId'], row['Gene Symbol'])
 
         # Adding to output
-        output_map.loc[index] = [row['Entrez GeneId'], uniprot_id, version]
+        output_map.loc[index] = [row['Entrez GeneId'], ','.join(uniprot_id)]
 
     # Writing output csv
     output_map.to_csv(OUTPUT_FILE_PATH, index=False)
 
 
-def __makeRequest(entrez: str, gene_id: str) -> tuple:
+def __makeRequest(entrez: str, gene_id: str) -> list:
     """
     Make request to the UniProt API, and extract the UniProt IDs
 
@@ -83,7 +83,7 @@ def __makeRequest(entrez: str, gene_id: str) -> tuple:
         logging.info('GET {0}'.format(r.url))
     else:
         logging.warning('FAILED GET request {0} with code {1}.'.format(r.url, r.status_code))
-        return RDF_NULL, 0 # Unknown
+        return list() # Unknown
 
     # Parsing response
     raw = r.text
@@ -92,16 +92,16 @@ def __makeRequest(entrez: str, gene_id: str) -> tuple:
         response = xmltodict.parse(raw) # Parse XML
     except xmltodict.expat.ExpatError:
         logging.warning('XML loading failed for Entrez ID {0} ({1}).'.format(entrez, gene_id))
-        return RDF_NULL, 0 # Unknown
+        return list() # Unknown
     else:
         # Extract UniProt ID
-        uniprot_id, version = __extractUniprotID(response, entrez)
-        return uniprot_id, version
+        uniprot_id = __extractUniprotID(response, entrez)
+        return uniprot_id
 
 
     raw = r.text
 
-def __extractUniprotID(response: xmltodict.OrderedDict, entrez: str) -> tuple:
+def __extractUniprotID(response: xmltodict.OrderedDict, entrez: str) -> list:
     """
     Extract the UniProt ID from the response from an API call to the UniProt endpoint.
 
@@ -109,36 +109,32 @@ def __extractUniprotID(response: xmltodict.OrderedDict, entrez: str) -> tuple:
     :param  entrez:     Entrez GeneId to be mapped to a UniProt ID
     :return:            Tuple of UniProt ID and the version of the database it was extracted from
     """
-    uniprot_id = ''
-    version = 0 # initial
+    uniprot_id = list()
+    # Two cases - one protein mapping or multiple protein mappings
     if type(response['uniprot']['entry']) is list:
-        # Multiple versions of UniProt available
-        logging.warning('More than one match for {0}.'.format(entrez))
+        # Multiple protein mappings available
         for entry in response['uniprot']['entry']:
             # Check if it is for Uniprot
             try:
                 if entry['@dataset'] == 'Swiss-Prot':
-                    # Check if it is from latest possible version
-                    if int(entry['@version']) > version:
-                        # Only take one alias
-                        uniprot_id = entry['accession'][0] if type(entry['accession']) is list else entry['accession']
-                        version = int(entry['@version']) # update version
+                    # Append to list of IDs (only take one)
+                    uniprot_id.append(entry['accession'][0] if type(entry['accession']) is list else entry['accession'])
             except TypeError:
                 continue
     else:
-        # One version of UniProt available
+        # Only version of UniProt available
         entry = response['uniprot']['entry']
         # Only take one alias
-        uniprot_id = entry['accession'][0] if type(entry['accession']) is list else entry['accession']
-        version = int(entry['@version']) # update version
-    if uniprot_id == '':
+        uniprot_id.append(entry['accession'][0] if type(entry['accession']) is list else entry['accession'])
+
+    if len(uniprot_id) == 0:
         # Uniprot ID not found
         logging.warning('FAILED Uniprot ID Extraction for Entrez ID {0}'.format(entrez))
-        uniprot_id = 'NOTFOUND'
+        return uniprot_id
     else:
-        uniprot_id = __buildURI(uniprot_id)
-        logging.info('Entrez ID {0} mapped to {1} from version {2}'.format(entrez, uniprot_id, version))
-    return uniprot_id, version
+        uniprot_id = [__buildURI(i) for i in uniprot_id]
+        logging.info('Entrez ID {0} mapped to {1}.'.format(entrez, uniprot_id))
+    return uniprot_id
 
 
 def __constructParams(entrez: str, genename: str, taxonomy: int = HUMAN_TAXON) -> dict:
