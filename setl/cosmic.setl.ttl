@@ -21,11 +21,19 @@
 
 
 # Importing tumor type mapping
-:cosmic_tumor_mappings a csvw:Table, setl:Table;
+:cosmic_tumor_mapping a csvw:Table, setl:Table;
   csvw:delimiter ",";
   prov:wasGeneratedBy [
     a setl:Extract;
     prov:used <file:///apps/biokg/data/cosmic_tumor_types.csv>;
+  ].
+
+# Importing Entrez Gene ID to Uniprot mapping
+:entrez_uniprot_mapping a csvw:Table, setl:Table;
+  csvw:delimiter ",";
+  prov:wasGeneratedBy [
+    a setl:Extract;
+    prov:used <file:///apps/biokg/data/cosmic_uniprot_ids.csv>;
   ].
 
 # Importing COSMIC csv data
@@ -42,7 +50,8 @@
 nanopub:cosmic a void:Dataset, setl:Persisted;
   prov:wasGeneratedBy :cosmic_import, [
     a setl:Transform, setl:JSLDT;
-    prov:qualifiedUsage [ a prov:Usage; prov:entity :cosmic_tumor_mappings; prov:hadRole [ dcterms:identifier "tumor_map"]];
+    prov:qualifiedUsage [ a prov:Usage; prov:entity :cosmic_tumor_mapping; prov:hadRole [ dcterms:identifier "tumor_map"]];
+    prov:qualifiedUsage [ a prov:Usage; prov:entity :entrez_uniprot_mapping; prov:hadRole [ dcterms:identifier "entrez_map"]];
     prov:used :cosmic_csv;
     setl:hasContext '''{
       "sio" :     "http://semanticscience.org/resource/",
@@ -50,6 +59,8 @@ nanopub:cosmic a void:Dataset, setl:Persisted;
       "cosmic_np":   "http://purl.org/twc/bio/cosmic/np/",
       "cosmic_provenance": "http://purl.org/twc/bio/cosmic/provenance/",
       "cosmic_assertion": "http://purl.org/twc/bio/cosmic/assertion/",
+      "cosmic_assertion_disease": "http://purl.org/twc/bio/cosmic/assertion/disease/",
+      "cosmic_assertion_protein": "http://purl.org/twc/bio/cosmic/assertion/protein/",
       "np":       "http://www.nanopub.org/nschema#",
       "ns":        "http://purl.org/twc/bio/cosmic/",
       "bions" :    "http://purl.org/twc/bio/ns/",
@@ -76,21 +87,35 @@ nanopub:cosmic a void:Dataset, setl:Persisted;
     {
       "@id": "cosmic_np:{{slugify(row['Entrez GeneId'])}}",
       "@type": "np:Nanopublication",
-      "np:hasAssertion": {
-        "@id": "cosmic_assertion:{{slugify(row['Entrez GeneId'])}}",
-        "@graph": [
-          {
-            "@for": "type in row['Tumour Types(Somatic)'].split(',')",
-            "@do": {
-              "@for": "tumor_idx in range(len(tumor_map.label))",
+      "np:hasAssertion": [
+        {
+          "@id": "cosmic_assertion_disease:{{slugify(row['Entrez GeneId'])}}",
+          "@graph": [
+            {
+              "@for": "type in row['Tumour Types(Somatic)'].split(',')",
               "@do": {
-                "@id": "entrezgene/locuslink:{{slugify(row['Entrez GeneId'])}}",
-                "@if": "tumor_map.label[tumor_idx] == type.strip()", "sio:000983": {"@id": "{{tumor_map.uri[tumor_idx]}}"}
+                "@for": "tumor_idx in range(len(tumor_map.label))",
+                "@do": {
+                  "@id": "entrezgene/locuslink:{{slugify(row['Entrez GeneId'])}}",
+                  "@if": "tumor_map.label[tumor_idx] == type.strip()", "sio:000983": {"@id": "{{tumor_map.uri[tumor_idx]}}"}
+                }
               }
             }
-          }
-        ]
-      },
+          ]
+        },
+        {
+          "@id": "cosmic_assertion_protein:{{slugify(row['Entrez GeneId'])}}",
+          "@graph": [
+            {
+              "@for": "uniprot_idx in range(len(entrez_map['EntrezGeneId']))",
+              "@do": {
+                "@id": "entrezgene/locuslink:{{slugify(row['Entrez GeneId'])}}",
+                "@if": "entrez_map['EntrezGeneId'][uniprot_idx] == row['Entrez GeneId']", "sio:010078": {"@id": "{{entrez_map['UniProtID'][uniprot_idx]}}"}
+              }
+            }
+          ]
+        }
+      ],
       "np:hasProvenance": {
         "prov:wasDerivedFrom": {"@id": "https://www.sanger.ac.uk/science/tools/cosmic"}
       }
