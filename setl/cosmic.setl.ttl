@@ -28,13 +28,18 @@
     prov:used <file:///apps/biokg/data/cosmic_tumor_types.csv>;
   ].
 
-# Importing Entrez Gene ID to Uniprot mapping
-:entrez_uniprot_mapping a csvw:Table, setl:Table;
-  csvw:delimiter ",";
-  prov:wasGeneratedBy [
-    a setl:Extract;
-    prov:used <file:///apps/biokg/data/cosmic_uniprot_ids.csv>;
-  ].
+# Adding hook for UniProt mapping function
+:uniprot_map a owl:Class, prov:SoftwareAgent, setl:PythonScript;
+  rdfs:subClassOf prov:Activity;
+  prov:value '''
+global mapper
+import imp
+mapper = imp.load_source('cosmic_uniprot_map', '/apps/biokg/biokg/py2_cosmic_uniprot_map.py')
+def result(s, *args, **kwargs):
+  s = s.encode('utf-8')
+  result = mapper.mapToUniProt(s, *args, **kwargs)
+  return result
+'''.
 
 # Importing COSMIC csv data
 :cosmic_csv a csvw:Table, setl:Table;
@@ -51,7 +56,7 @@ nanopub:cosmic a void:Dataset, setl:Persisted;
   prov:wasGeneratedBy :cosmic_import, [
     a setl:Transform, setl:JSLDT;
     prov:qualifiedUsage [ a prov:Usage; prov:entity :cosmic_tumor_mapping; prov:hadRole [ dcterms:identifier "tumor_map"]];
-    prov:qualifiedUsage [ a prov:Usage; prov:entity :entrez_uniprot_mapping; prov:hadRole [ dcterms:identifier "entrez_map"]];
+    prov:qualifiedUsage [ a prov:Usage; prov:entity :uniprot_map; prov:hadRole [ dcterms:identifier "uniprot_map"]];
     prov:used :cosmic_csv;
     setl:hasContext '''{
       "sio" :     "http://semanticscience.org/resource/",
@@ -107,10 +112,13 @@ nanopub:cosmic a void:Dataset, setl:Persisted;
           "@id": "cosmic_assertion_protein:{{slugify(row['Entrez GeneId'])}}",
           "@graph": [
             {
-              "@for": "uniprot_idx in range(len(entrez_map['EntrezGeneId']))",
+              "@with": "uniprot_map(row['Entrez GeneId'], row['Gene Symbol']) as uniprot_ids",
               "@do": {
-                "@id": "entrezgene/locuslink:{{slugify(row['Entrez GeneId'])}}",
-                "@if": "entrez_map['EntrezGeneId'][uniprot_idx] == row['Entrez GeneId']", "sio:010078": {"@id": "{{entrez_map['UniProtID'][uniprot_idx]}}"}
+                "@for": "uniprot_id in uniprot_ids",
+                "@do": {
+                  "@id": "entrezgene/locuslink:{{slugify(row['Entrez GeneId'])}}",
+                  "sio:010078": {"@id": "{{uniprot_id}}"}
+                }
               }
             }
           ]
@@ -122,7 +130,7 @@ nanopub:cosmic a void:Dataset, setl:Persisted;
     }
     ]'''].
 
-<cosmic.ttl> a pv:File;
+<file:///apps/biokg/setl/cosmic.ttl> a pv:File;
     dcterms:format "application/trig";
     prov:wasGeneratedBy [
       a setl:Load;
