@@ -28,7 +28,6 @@ OUTPUT_FILE_PATH = u'data/cosmic_uniprot_ids.csv'
 HUMAN_TAXON = 9606 # Corresponds to http://purl.uniprot.org/core/taxonomy/9606
 UNIPROT_API_URL = u'http://www.uniprot.org/uniprot/'
 UNIPROT_PREFIX = u'http://www.uniprot.org/uniprot/'
-RDF_NULL = u'NONE'
 
 
 def mapToUniProt(entrez, gene_symbol):
