@@ -3,6 +3,7 @@ data/irefindex_short.txt
 data/cosmic.csv
 setl/cosmic.ttl
 setl/irefindex.ttl
+log/
 
 # Emacs backups
 *~
