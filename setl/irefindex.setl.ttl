@@ -15,11 +15,11 @@
 @prefix :              <http://purl.org/twc/bio/setl/irefindex/> .
 
 
-:table a csvw:Table, setl:Table, setl:ZipFile;
+:table a csvw:Table, setl:Table;
   csvw:delimiter "\t";
   prov:wasGeneratedBy [
     a setl:Extract;
-    prov:used <http://irefindex.org/download/irefindex/data/archive/release_15.0/psi_mitab/MITAB2.6/9606.mitab.22012018.txt.zip>;
+    prov:used <file:///apps/biokg/data/irefindex_short.txt>;
   ].
 
 :irefindex_import a setl:SemanticETLScript;
@@ -58,7 +58,7 @@ np:irefindex a void:Dataset, setl:Persisted;
     prov:value '''[
 {
   "@id": "np:",
-  "@type" : "np:Nanopublication", 
+  "@type" : "np:Nanopublication",
   "@id" : "entry:{{slugify(row.interactionIdentifier)}}",
   "np:hasAssertion" : {
     "@id" : "entry:{{slugify(row.interactionIdentifier)}}_assertion",
@@ -99,7 +99,7 @@ np:irefindex a void:Dataset, setl:Persisted;
           ]
         },
         {
-          "@id": "{{row.uidB}}",
+          "@id": "{{row['uidB']}}",
           "rdfs:label": [
             { "@for" : "l in row.aliasB.split('|')",
               "@do" : { "@if" : "'hgnc:' in l", "@value" : "l.split(':')[1]"  }

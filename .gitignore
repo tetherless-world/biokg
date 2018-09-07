@@ -5,6 +5,8 @@ setl/cosmic.ttl
 setl/irefindex.ttl
 log/
 
+# IDE files
+.vscode/
 # Emacs backups
 *~
 
