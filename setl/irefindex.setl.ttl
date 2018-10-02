@@ -17,11 +17,11 @@
 
 @prefix nanopub: <http://www.nanopub.org/nschema#> .
 
-:table a csvw:Table, setl:Table, setl:ZipFile;
+:table a csvw:Table, setl:Table;
   csvw:delimiter "\t";
   prov:wasGeneratedBy [
     a setl:Extract;
-    prov:used <http://irefindex.org/download/irefindex/data/archive/release_15.0/psi_mitab/MITAB2.6/9606.mitab.22012018.txt.zip>;
+    prov:used <file:///apps/biokg/data/irefindex_short.txt>;
   ].
 
 :irefindex_import a setl:SemanticETLScript;
@@ -100,7 +100,7 @@ np:irefindex a void:Dataset, setl:Persisted, whyis:NanopublicationCollection;
           ]
         },
         {
-          "@id": "{{row.uidB}}",
+          "@id": "{{row['uidB']}}",
           "rdfs:label": [
             { "@for" : "l in row.aliasB.split('|')",
               "@do" : { "@if" : "'hgnc:' in l", "@value" : "l.split(':')[1]"  }
