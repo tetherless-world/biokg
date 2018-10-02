@@ -193,6 +193,7 @@ Config = dict(
     ],
     inferencers = {
         "SETLr": autonomic.SETLr(),
+        "SETLMaker": autonomic.SETLMaker(),
         "OntologyImporter" : autonomic.OntologyImporter(),
 #        "HTML2Text" : nlp.HTML2Text(),
 #        "EntityExtractor" : nlp.EntityExtractor(),

@@ -13,7 +13,9 @@
 @prefix pv:            <http://purl.org/net/provenance/ns#> .
 @prefix np:            <http://www.nanopub.org/nschema#> .
 @prefix :              <http://purl.org/twc/bio/setl/irefindex/> .
+@prefix whyis:         <http://vocab.rpi.edu/whyis/>.
 
+@prefix nanopub: <http://www.nanopub.org/nschema#> .
 
 :table a csvw:Table, setl:Table, setl:ZipFile;
   csvw:delimiter "\t";
@@ -25,7 +27,7 @@
 :irefindex_import a setl:SemanticETLScript;
   rdfs:label "iRefIndex Import SETL Script".
 
-np:irefindex a void:Dataset, setl:Persisted;
+np:irefindex a void:Dataset, setl:Persisted, whyis:NanopublicationCollection;
   prov:wasGeneratedBy :irefindex_import, [
     a setl:Transform, setl:JSLDT;
     prov:used :table;
@@ -55,13 +57,12 @@ np:irefindex a void:Dataset, setl:Persisted;
     "MI":         "http://purl.obolibrary.org/obo/MI_" ,
     "prov":     "http://www.w3.org/ns/prov#"
 }''';
-    prov:value '''[
+    prov:value '''[{ "@with": "(Nanopublication()) as drugid, np", "@do": 
 {
-  "@id": "np:",
+  "@id": "{{np.identifier}}",
   "@type" : "np:Nanopublication", 
-  "@id" : "entry:{{slugify(row.interactionIdentifier)}}",
   "np:hasAssertion" : {
-    "@id" : "entry:{{slugify(row.interactionIdentifier)}}_assertion",
+    "@id": "{{np.assertion.identifier}}",
     "@graph" : [
         {
           "@id": "{{row['#uidA']}}",
@@ -142,15 +143,15 @@ np:irefindex a void:Dataset, setl:Persisted;
       ]
   },
   "np:hasProvenance" : {
-      "@id" : "ns:{{slugify(row.interactionIdentifier)}}_provenance",
+      "@id": "{{np.provenance.identifier}}",
       "@graph" : {
-        "@id" : "ns:{{slugify(row.interactionIdentifier)}}_assertion",
+        "@id": "{{np.assertion.identifier}}",
         "prov:wasDerivedFrom" : [
           {
             "@if" : "row.pmids != '-'",
             "@for" : "pmid in row.pmids.split('|')",
             "@do" : {
-              "@id" : "{{pmid}}",
+              "@id" : "pubmed:{{pmid}}",
               "@type" : "sio:PeerReviewedArticle"
             }
           }

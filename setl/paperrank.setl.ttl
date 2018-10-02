@@ -1,0 +1,65 @@
+@prefix rdf:           <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:          <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:           <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl:           <http://www.w3.org/2002/07/owl#> .
+@prefix skos:          <http://www.w3.org/2004/02/skos/core#> .
+@prefix prov:          <http://www.w3.org/ns/prov#> .
+@prefix sio:           <http://semanticscience.org/resource/> .
+@prefix dcat:          <http://www.w3.org/ns/dcat#> .
+@prefix dcterms:       <http://purl.org/dc/terms/> .
+@prefix void:          <http://rdfs.org/ns/void#> .
+@prefix setl:          <http://purl.org/twc/vocab/setl/> .
+@prefix csvw:          <http://www.w3.org/ns/csvw#> .
+@prefix pv:            <http://purl.org/net/provenance/ns#> .
+@prefix np:            <http://www.nanopub.org/nschema#> .
+@prefix :              <http://purl.org/twc/bio/setl/paperrank/> .
+@prefix whyis:         <http://vocab.rpi.edu/whyis/>.
+
+@prefix nanopub: <http://www.nanopub.org/nschema#> .
+
+:paperrank_input a csvw:Table, setl:Table;
+  prov:wasGeneratedBy [
+    a setl:Extract;
+    prov:used  [ a whyis:PaperRankScoresFile]
+  ].
+  
+:PaperRankSETL rdfs:subClassOf setl:SemanticETLScript;
+  setl:hasTemplatePrefix "http://vocab.rpi.edu/whyis/setl/paperrank/";
+  rdfs:subClassOf [ a owl:Restriction;
+    owl:onProperty prov:used;
+    owl:someValuesFrom whyis:PaperRankScoresFile
+  ].
+
+np:irefindex a void:Dataset;
+  prov:wasGeneratedBy :irefindex_import, [
+    a setl:Transform, setl:JSLDT;
+    prov:used :table;
+    setl:hasContext '''{
+    "sio" :     "http://semanticscience.org/resource/",
+    "rdfs" :    "http://www.w3.org/2000/01/rdf-schema#",
+    "pubmed" :  "https://www.ncbi.nlm.nih.gov/pubmed/",
+    "prov":     "http://www.w3.org/ns/prov#",
+    "whyis" :   "http://vocab.rpi.edu/whyis/"
+}''';
+    prov:value '''[{ 
+  "@id": "pubmed:{{row['PubMed ID']}}",
+  "@type" : "sio:PeerReviewedArticle"
+  "sio:hasAttribute": {
+    "@type" : [
+      "whyis:ConfidenceScore",
+      "whyis:PaperRankScore",
+      "sio:ProbabilityMeasure"
+    ],
+    "sio:hasValue" : {
+      "@value" : "row['Adj Gamma Trust']",
+      "@type" : "xsd:float"
+    }
+  }
+]'''].
+
+#<parsed.ttl> a pv:File;
+#    dcterms:format "application/trig";
+#    prov:wasGeneratedBy [
+#      a setl:Load;
+#      prov:used np:irefindex ;
+#    ].
